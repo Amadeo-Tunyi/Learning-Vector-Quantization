@@ -40,7 +40,7 @@ class RSLVQ:
                 if self.cat_full == True:
                     P = np.array(prototypes)
                 else:
-                    P = np.array(prototypes) + (0.01 *1* np.random.uniform(low = -1.0, high = 1.0, size = 1)*np.array(prototypes))
+                    P = np.array(prototypes) + (0.01 *self.sigma* np.random.uniform(low = -1.0, high = 1.0, size = 1)*np.array(prototypes))
                 new_labels = unique_labels
             else:
                 list2 = []
@@ -290,18 +290,18 @@ class RSLVQ:
 
 
     
-    def Pl_loss(self, unit, target_class, prototypes):
+    def Pl_loss(self, unit, target_class):
         #updated_prototypes = self.fit()
         index = np.flatnonzero(self.proto_labels == target_class)[0]
 
         u = []
-        for i in range(len(prototypes)):
+        for i in range(len(self.prototypes)):
             if target_class == self.proto_labels[i]:
-                u.append(np.exp(self.inner_f(unit, prototypes[i])))
+                u.append(np.exp(self.inner_f(unit, self.prototypes[i])))
             else:
                 u.append(0)
             numerator = np.array(u).sum()
-        denominator = np.sum(np.array([np.exp(self.inner_f(unit, p)) for p in prototypes]))
+        denominator = np.sum(np.array([np.exp(self.inner_f(unit, p)) for p in self.prototypes]))
         
         return numerator/denominator 
 
