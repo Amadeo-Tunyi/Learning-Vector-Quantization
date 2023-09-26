@@ -45,11 +45,8 @@ class RLVQ:
                     index = np.flatnonzero(labels == i)
                     class_data = train_data[index]
                     mu = np.mean(class_data, axis = 0)
-                    if self.cat_full == True:
-                        mu = mu#.astype(int)
-                        distances = [self.indicator_dist(mu, c) for c in class_data]
-                    else:
-                        distances = [(mu-c)@(mu-c).T for c in class_data]
+
+                    distances = [(mu-c)@(mu-c).T for c in class_data]
                     index = np.argsort(distances)
                     indices = index[1:self.num_prototypes]
                     prototype = class_data[indices]
