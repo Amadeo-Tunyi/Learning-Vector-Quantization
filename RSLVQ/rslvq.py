@@ -265,9 +265,9 @@ class RSLVQ:
         
         return x_label
     
-    def proba_predict(self, input):
+    def proba_predict(self, input, softmax = False):
         """probabilistic prediction of a point by approximation of distances of a point to closest prototypes
-        the argmin is the desired class"""
+        the argmin is the desired class. If softmax is true, then predicted class is argmax"""
         scores = []
         closest_prototypes = []
         for i in np.unique(self.proto_labels):
@@ -277,7 +277,11 @@ class RSLVQ:
             closest_prototypes.append(closest_prototype)
         dists = np.array([np.linalg.norm(input - prototype) for prototype in closest_prototypes])
         scores = np.array([d/dists.sum() for d in dists])
+        if softmax == True:
+            score = scores.copy()
+            scores = [np.exp(-z)/(np.array(np.exp(-1*score)).sum()) for z in score]
         return scores 
+
     
   
     def inner_f(self, x, p):
